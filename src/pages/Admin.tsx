@@ -345,13 +345,28 @@ const Admin = () => {
                   <div>
                     <label className="block text-sm font-medium mb-1">Preço</label>
                     <Input
-                      type="number"
-                      value={newGift.price}
-                      onChange={(e) => setNewGift({ ...newGift, price: Number(e.target.value) })}
+                      type="text"
+                      value={newGift.price === 0 ? '' : newGift.price.toString().replace('.', ',')}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(',', '.');
+                        const numericValue = value === '' ? 0 : parseFloat(value);
+                        if (!isNaN(numericValue)) {
+                          setNewGift({ ...newGift, price: numericValue });
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const value = parseFloat(e.target.value.replace(',', '.'));
+                        if (!isNaN(value)) {
+                          const formattedValue = new Intl.NumberFormat('pt-BR', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                          }).format(value);
+                          e.target.value = formattedValue;
+                        }
+                      }}
                       required
-                      min="0"
-                      step="0.01"
-                      placeholder="0.00"
+                      placeholder="0,00"
+                      inputMode="decimal"
                     />
                   </div>
                   

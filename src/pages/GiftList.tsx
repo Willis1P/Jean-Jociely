@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Gift } from '@/types/gift';
 import { Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import QRCodePix from '@/assets/qr-code-pix.jpg';
+import BackgroundVideo from '@/components/BackgroundVideo';
 
 const GiftList = () => {
   const [gifts, setGifts] = useState<Gift[]>([]);
@@ -70,54 +70,62 @@ const GiftList = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-wedding-dark-green" />
-      </div>
+      <>
+        <BackgroundVideo />
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-wedding-dark-green" />
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-serif text-wedding-dark-green text-center mb-8">
-          Lista de Presentes
-        </h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {gifts.map((gift) => (
-            <Card key={gift.id} className="overflow-hidden">
-              <img
-                src={gift.image_url}
-                alt={gift.name}
-                className="w-full h-64 object-contain bg-gray-50 p-4"
-              />
-              <div className="p-4">
-                <h3 className="font-medium text-lg mb-2">{gift.name}</h3>
-                <p className="text-wedding-dark-green font-semibold mb-4">
-                  {formatPrice(gift.price)}
-                </p>
-                {gift.reserved_by ? (
-                  <p className="text-wedding-dark-gray text-sm">
-                    Reservado por: {gift.reserved_by}
-                  </p>
-                ) : (
-                  <Button
-                    onClick={() => setSelectedGift(gift)}
-                    className="w-full bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    Presentear
-                  </Button>
-                )}
-              </div>
-            </Card>
-          ))}
+    <>
+      <BackgroundVideo />
+      <div className="min-h-screen bg-transparent py-8 px-4 relative">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-6 md:p-10 border border-wedding-medium-green/30 mb-8">
+            <h1 className="text-3xl font-serif text-wedding-dark-green text-center mb-8">
+              Lista de Presentes
+            </h1>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {gifts.map((gift) => (
+                <Card key={gift.id} className="overflow-hidden bg-white/90 backdrop-blur-sm">
+                  <img
+                    src={gift.image_url}
+                    alt={gift.name}
+                    className="w-full h-64 object-contain bg-gray-50 p-4"
+                  />
+                  <div className="p-4">
+                    <h3 className="font-medium text-lg mb-2">{gift.name}</h3>
+                    <p className="text-wedding-dark-green font-semibold mb-4">
+                      {formatPrice(gift.price)}
+                    </p>
+                    {gift.reserved_by ? (
+                      <p className="text-wedding-dark-gray text-sm">
+                        Reservado por: {gift.reserved_by}
+                      </p>
+                    ) : (
+                      <Button
+                        onClick={() => setSelectedGift(gift)}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white"
+                      >
+                        Presentear
+                      </Button>
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
         </div>
 
         <Dialog open={!!selectedGift && !showQRCode} onOpenChange={() => {
           setSelectedGift(null);
           setReservationName('');
         }}>
-          <DialogContent>
+          <DialogContent className="bg-white/95 backdrop-blur-sm">
             <DialogHeader>
               <DialogTitle>Reservar Presente</DialogTitle>
               <DialogDescription>
@@ -146,7 +154,7 @@ const GiftList = () => {
           setSelectedGift(null);
           setReservationName('');
         }}>
-          <DialogContent>
+          <DialogContent className="bg-white/95 backdrop-blur-sm">
             <DialogHeader>
               <DialogTitle>Pagamento via PIX</DialogTitle>
               <DialogDescription>
@@ -154,16 +162,17 @@ const GiftList = () => {
               </DialogDescription>
             </DialogHeader>
             <div className="flex flex-col items-center space-y-4">
-              <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex flex-col items-center bg-wedding-light-green/20 p-6 rounded-lg">
+                <p className="text-wedding-dark-gray font-medium">
+                  Chave pix: (27) 99848-1592
+                </p>
+                <p className="text-wedding-dark-gray font-medium mb-4">
+                  Nome: Jean Sandrini
+                </p>
                 <img
-                  src={QRCodePix}
+                  src="/lovable-uploads/lua-de-mel-qr.png.jpg"
                   alt="QR Code PIX"
-                  className="w-64 h-64"
-                  onError={(e) => {
-                    console.error('Erro ao carregar QR code:', e);
-                    e.currentTarget.style.display = 'none';
-                  }}
-                  onLoad={() => console.log('QR code carregado com sucesso')}
+                  className="w-64 h-64 border-4 border-wedding-medium-green p-1 rounded-md bg-white"
                 />
               </div>
               <div className="text-center space-y-2">
@@ -178,7 +187,7 @@ const GiftList = () => {
           </DialogContent>
         </Dialog>
       </div>
-    </div>
+    </>
   );
 };
 

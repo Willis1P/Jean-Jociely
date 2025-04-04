@@ -1,25 +1,35 @@
-
 import React from 'react';
 
 const GiftMessage = () => {
   return (
     <div className="my-8 text-center px-4 animate-fade-in" style={{ animationDelay: "0.8s" }}>
+      <h2 className="font-script text-3xl text-wedding-dark-green mb-4">
+        Operação Lua de Mel
+      </h2>
       <p className="font-serif text-lg text-wedding-dark-gray mb-4">
-        O melhor presente é sua presença.
+        Queridos amigos e familiares, pretendemos fazer uma viagem de Lua de Mel, mas só será possível com a sua ajuda!
       </p>
-      <p className="font-script text-xl text-wedding-dark-green mb-6">
-        Caso queira nos presentear, sugerimos uma contribuição via Pix
+      <p className="font-serif text-lg text-wedding-dark-gray mb-4">
+        Esqueceu o dinheiro?
       </p>
-      <div className="flex justify-center">
-        <img 
-          src="/lovable-uploads/b4c561f6-a279-4583-bd70-17d404f6d1ca.png" 
-          alt="QR Code PIX" 
-          className="max-w-[200px] h-auto border-4 border-wedding-medium-green p-1 rounded-md"
-        />
+      <div className="flex flex-col items-center gap-4">
+        <p className="font-script text-2xl text-wedding-dark-green">
+          Faz um Pix
+        </p>
+        <div className="flex flex-col items-center bg-wedding-light-green/20 p-6 rounded-lg">
+          <p className="text-wedding-dark-gray font-medium">
+            Chave pix: (27) 99848-1592
+          </p>
+          <p className="text-wedding-dark-gray font-medium mb-4">
+            Nome: Jean Sandrini
+          </p>
+          <img 
+            src="/lovable-uploads/lua-de-mel-qr.png.jpg" 
+            alt="QR Code PIX Lua de Mel" 
+            className="max-w-[200px] h-auto border-4 border-wedding-medium-green p-1 rounded-md bg-white"
+          />
+        </div>
       </div>
-      <p className="mt-4 text-sm text-wedding-dark-gray/80">
-        @jean.sandrini
-      </p>
     </div>
   );
 };
