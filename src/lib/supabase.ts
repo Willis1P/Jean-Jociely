@@ -12,14 +12,16 @@ console.log('Detalhes completos da configuração Supabase:', {
   url: env.url,
   anonKeyPrimeiros10Chars: env.anonKey?.substring(0, 10),
   urlValida: env.url?.startsWith('https://'),
-  timestamp: new Date().toISOString()
+  timestamp: new Date().toISOString(),
+  ambiente: import.meta.env.MODE
 });
 
 if (!env.url || !env.anonKey) {
   console.error('Erro de configuração do Supabase:', {
     urlPresente: !!env.url,
     anonKeyPresente: !!env.anonKey,
-    urlCompleta: env.url
+    urlCompleta: env.url,
+    ambiente: import.meta.env.MODE
   });
   throw new Error('Configuração do Supabase incompleta');
 }
@@ -29,29 +31,45 @@ export const supabase = createClient(env.url, env.anonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: true
+    detectSessionInUrl: true,
+    storageKey: 'supabase-auth'
   },
-  global: {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${env.anonKey}`
-    }
+  db: {
+    schema: 'public'
   }
 });
 
 // Teste de conexão inicial
-supabase
-  .from('gifts')
-  .select('count')
-  .limit(1)
-  .single()
-  .then(response => {
+const testarConexao = async () => {
+  try {
+    const { data, error, status } = await supabase
+      .from('gifts')
+      .select('count')
+      .limit(1)
+      .single();
+    
     console.log('Teste de conexão Supabase:', {
-      sucesso: !response.error,
-      erro: response.error?.message,
-      status: response.status
+      sucesso: !error,
+      erro: error?.message,
+      status,
+      data,
+      headers: {
+        authorization: `Bearer ${env.anonKey.substring(0, 10)}...`,
+        contentType: 'application/json'
+      }
     });
-  })
-  .catch(error => {
-    console.error('Erro no teste de conexão:', error);
-  }); 
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    console.error('Erro no teste de conexão:', {
+      mensagem: error.message,
+      codigo: error.code,
+      detalhes: error.details,
+      dica: error.hint
+    });
+  }
+};
+
+testarConexao(); 
