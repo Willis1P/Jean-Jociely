@@ -24,6 +24,10 @@ export default defineConfig(({ mode }) => {
     },
     envPrefix: 'VITE_',
     define: {
+      __SUPABASE_URL__: JSON.stringify(env.VITE_SUPABASE_URL),
+      __SUPABASE_ANON_KEY__: JSON.stringify(env.VITE_SUPABASE_ANON_KEY),
+      __SUPABASE_SERVICE_ROLE_KEY__: JSON.stringify(env.VITE_SUPABASE_SERVICE_ROLE_KEY),
+      __ADMIN_PASSWORD__: JSON.stringify(env.VITE_ADMIN_PASSWORD),
       'process.env': {},
       'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(env.VITE_SUPABASE_URL),
       'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(env.VITE_SUPABASE_ANON_KEY),
