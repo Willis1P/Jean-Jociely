@@ -24,7 +24,7 @@ const GiftMessage = () => {
             Nome: Jean Sandrini
           </p>
           <img 
-            src="/lovable-uploads/lua-de-mel-qr.jpg" 
+            src="/assets/images/lua-de-mel-qr.jpg" 
             alt="QR Code PIX Lua de Mel" 
             className="max-w-[200px] h-auto border-4 border-wedding-medium-green p-1 rounded-md bg-white"
           />
