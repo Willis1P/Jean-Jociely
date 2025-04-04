@@ -6,16 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Gift, GiftFormData } from '@/types/gift';
 import { supabase } from '@/lib/supabase';
 import { Upload, Image as ImageIcon } from 'lucide-react';
+import { Confirmation } from '@/types/confirmation';
 
 interface Guest {
   name: string;
   type: 'adult' | 'child';
-}
-
-interface Confirmation {
-  id: string;
-  guests: Guest[];
-  created_at: string;
 }
 
 const Admin = () => {
@@ -24,6 +19,8 @@ const Admin = () => {
   const [confirmations, setConfirmations] = useState<Confirmation[]>([]);
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [totalGuests, setTotalGuests] = useState(0);
+  const [totalAdults, setTotalAdults] = useState(0);
+  const [totalChildren, setTotalChildren] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [newGift, setNewGift] = useState<GiftFormData>({
     name: '',
@@ -61,8 +58,24 @@ const Admin = () => {
       if (error) throw error;
 
       setConfirmations(data || []);
-      const total = data?.reduce((acc, curr) => acc + curr.guests.length, 0) || 0;
-      setTotalGuests(total);
+      
+      // Calculando totais
+      let adults = 0;
+      let children = 0;
+      
+      data?.forEach(confirmation => {
+        confirmation.guests.forEach(guest => {
+          if (guest.type === 'adult') {
+            adults++;
+          } else {
+            children++;
+          }
+        });
+      });
+      
+      setTotalAdults(adults);
+      setTotalChildren(children);
+      setTotalGuests(adults + children);
     } catch (error) {
       console.error('Erro ao buscar confirmações:', error);
       alert('Erro ao carregar as confirmações. Por favor, tente novamente.');
@@ -244,22 +257,37 @@ const Admin = () => {
           </TabsList>
 
           <TabsContent value="confirmations">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-start mb-6">
               <h1 className="text-2xl font-serif text-wedding-dark-green">
                 Confirmações de Presença
               </h1>
               <div className="text-right">
-                <p className="text-lg text-wedding-dark-gray">
-                  Total de confirmados: {totalGuests}
-                </p>
-                <Button
-                  onClick={fetchConfirmations}
-                  variant="outline"
-                  className="mt-2"
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Atualizando...' : 'Atualizar lista'}
-                </Button>
+                <div className="bg-white rounded-lg p-4 shadow">
+                  <h2 className="text-lg font-medium text-wedding-dark-green mb-2">
+                    Total de Confirmados
+                  </h2>
+                  <div className="space-y-2">
+                    <p className="text-wedding-dark-gray">
+                      Adultos: <span className="font-medium">{totalAdults}</span>
+                    </p>
+                    <p className="text-wedding-dark-gray">
+                      Crianças: <span className="font-medium">{totalChildren}</span>
+                    </p>
+                    <div className="border-t pt-2 mt-2">
+                      <p className="text-lg font-medium text-wedding-dark-green">
+                        Total: {totalGuests}
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={fetchConfirmations}
+                    variant="outline"
+                    className="mt-4 w-full"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Atualizando...' : 'Atualizar lista'}
+                  </Button>
+                </div>
               </div>
             </div>
 
