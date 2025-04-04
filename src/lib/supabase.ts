@@ -2,15 +2,18 @@ import { createClient } from '@supabase/supabase-js';
 
 // Log completo das variáveis de ambiente
 const env = {
-  url: import.meta.env.VITE_SUPABASE_URL,
-  anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-  serviceKey: import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY,
-  adminPass: import.meta.env.VITE_ADMIN_PASSWORD
+  url: import.meta.env.VITE_SUPABASE_URL?.trim(),
+  anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY?.trim(),
+  serviceKey: import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY?.trim(),
+  adminPass: import.meta.env.VITE_ADMIN_PASSWORD?.trim()
 };
 
+// Log detalhado para debug
 console.log('Detalhes completos da configuração Supabase:', {
   url: env.url,
-  anonKeyPrimeiros10Chars: env.anonKey?.substring(0, 10),
+  anonKeyTamanho: env.anonKey?.length,
+  anonKeyPrimeiros10: env.anonKey?.substring(0, 10),
+  anonKeyUltimos10: env.anonKey?.substring(env.anonKey.length - 10),
   urlValida: env.url?.startsWith('https://'),
   timestamp: new Date().toISOString(),
   ambiente: import.meta.env.MODE
@@ -34,14 +37,18 @@ export const supabase = createClient(env.url, env.anonKey, {
     detectSessionInUrl: true,
     storageKey: 'supabase-auth'
   },
-  db: {
-    schema: 'public'
+  global: {
+    headers: {
+      'apikey': env.anonKey
+    }
   }
 });
 
 // Teste de conexão inicial
 const testarConexao = async () => {
   try {
+    console.log('Iniciando teste de conexão com o Supabase...');
+    
     const { data, error, status } = await supabase
       .from('gifts')
       .select('count')
@@ -54,7 +61,7 @@ const testarConexao = async () => {
       status,
       data,
       headers: {
-        authorization: `Bearer ${env.anonKey.substring(0, 10)}...`,
+        apikey: `${env.anonKey?.substring(0, 10)}...${env.anonKey?.substring(env.anonKey.length - 10)}`,
         contentType: 'application/json'
       }
     });
@@ -67,7 +74,8 @@ const testarConexao = async () => {
       mensagem: error.message,
       codigo: error.code,
       detalhes: error.details,
-      dica: error.hint
+      dica: error.hint,
+      stack: error.stack
     });
   }
 };
