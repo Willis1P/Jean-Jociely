@@ -170,7 +170,7 @@ const GiftList = () => {
                   Nome: Jean Sandrini
                 </p>
                 <img
-                  src="/lovable-uploads/lua-de-mel-qr.png.jpg"
+                  src="/lovable-uploads/qr-code-pix.jpg"
                   alt="QR Code PIX"
                   className="w-64 h-64 border-4 border-wedding-medium-green p-1 rounded-md bg-white"
                 />
