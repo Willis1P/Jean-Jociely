@@ -410,26 +410,26 @@ const Admin = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {gifts.map((gift) => (
-                  <Card key={gift.id} className="overflow-hidden">
+                  <Card key={gift.id} className="overflow-hidden flex flex-col">
                     <img
                       src={gift.image_url}
                       alt={gift.name}
                       className="w-full h-64 object-contain bg-gray-50 p-4"
                     />
-                    <div className="p-4">
+                    <div className="p-4 flex flex-col flex-1">
                       <h3 className="font-medium text-lg mb-2">{gift.name}</h3>
-                      <p className="text-wedding-dark-green font-semibold mb-2">
+                      <p className="text-wedding-dark-green font-semibold mb-4">
                         {formatPrice(gift.price)}
                       </p>
                       {gift.reserved_by && (
-                        <p className="text-wedding-dark-gray text-sm mb-2">
+                        <p className="text-wedding-dark-gray text-sm mb-4">
                           Reservado por: {gift.reserved_by}
                         </p>
                       )}
                       <Button
                         onClick={() => handleDeleteGift(gift.id)}
                         variant="destructive"
-                        className="w-full"
+                        className="w-full mt-auto"
                       >
                         Excluir
                       </Button>
