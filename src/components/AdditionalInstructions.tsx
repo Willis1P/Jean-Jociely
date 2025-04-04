@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const AdditionalInstructions = () => {
@@ -16,8 +15,8 @@ const AdditionalInstructions = () => {
         </div>
         
         <div className="p-4 rounded-lg bg-wedding-light-green/50">
-          <p className="font-serif text-wedding-dark-green text-lg mb-2">Filtro</p>
-          <p className="text-sm text-wedding-dark-gray">Utilize nosso filtro especial no Instagram</p>
+          <p className="font-serif text-wedding-dark-green text-lg mb-2">Presentes</p>
+          <p className="text-sm text-wedding-dark-gray">Confira nossa lista de presentes no menu abaixo</p>
         </div>
       </div>
     </div>

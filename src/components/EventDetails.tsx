@@ -1,4 +1,5 @@
 import React from 'react';
+import CountdownTimer from './CountdownTimer';
 
 const EventDetails = () => {
   return (
@@ -21,6 +22,7 @@ const EventDetails = () => {
         <p className="mt-4 font-script text-2xl text-wedding-dark-green">
           às 16:00
         </p>
+        <CountdownTimer />
       </div>
       
       <div>
