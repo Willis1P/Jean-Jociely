@@ -8,18 +8,20 @@ const env = {
   adminPass: import.meta.env.VITE_ADMIN_PASSWORD
 };
 
-console.log('Variáveis de ambiente carregadas:', {
-  temUrl: !!env.url,
-  temAnonKey: !!env.anonKey,
-  urlCompleta: env.url === 'https://twskyciqnyoxslqbctdd.supabase.co',
-  anonKeyTamanho: env.anonKey?.length
+console.log('Detalhes completos da configuração Supabase:', {
+  url: env.url,
+  anonKeyPrimeiros10Chars: env.anonKey?.substring(0, 10),
+  urlValida: env.url?.startsWith('https://'),
+  timestamp: new Date().toISOString()
 });
 
 if (!env.url || !env.anonKey) {
-  throw new Error(`Configuração do Supabase incompleta:
-    URL: ${env.url ? 'presente' : 'ausente'}
-    Anon Key: ${env.anonKey ? 'presente' : 'ausente'}
-  `);
+  console.error('Erro de configuração do Supabase:', {
+    urlPresente: !!env.url,
+    anonKeyPresente: !!env.anonKey,
+    urlCompleta: env.url
+  });
+  throw new Error('Configuração do Supabase incompleta');
 }
 
 // Criar cliente com configurações específicas
@@ -32,7 +34,24 @@ export const supabase = createClient(env.url, env.anonKey, {
   global: {
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Authorization': `Bearer ${env.anonKey}`
     }
   }
-}); 
+});
+
+// Teste de conexão inicial
+supabase
+  .from('gifts')
+  .select('count')
+  .limit(1)
+  .single()
+  .then(response => {
+    console.log('Teste de conexão Supabase:', {
+      sucesso: !response.error,
+      erro: response.error?.message,
+      status: response.status
+    });
+  })
+  .catch(error => {
+    console.error('Erro no teste de conexão:', error);
+  }); 
