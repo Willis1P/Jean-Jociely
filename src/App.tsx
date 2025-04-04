@@ -22,6 +22,7 @@ const App = () => (
           <Route path="/admin" element={<Admin />} />
           <Route path="/confirmar-presenca" element={<ConfirmationPage />} />
           <Route path="/lista-presentes" element={<GiftList />} />
+          <Route path="/lista-presentes/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
